@@ -1,0 +1,178 @@
+Practical No. 8
+Aim: To Implement A Typical Service And A Typical Client Using WCF.
+
+Step-by-Step Implementation Guide
+Step 1: Create the WCF Service Project
+ 1. Open Visual Studio.
+
+2. Go to File -> New -> Project...
+
+3. Search for and select WCF Service Application (or choose a WCF template).
+
+4. Set the Project Name to WCFService3.
+
+5. Ensure the target framework is set to .NET Framework 4.8, then click Create / OK.
+
+Step 2: Create the Service Code (StudentService.cs)
+1. In the Solution Explorer, right-click on your project (WCFService3).
+
+2. Go to Add -> Class...
+
+3. Name the class StudentService.cs and click Add.
+
+4. Replace the code in StudentService.cs with the following implementation:
+
+code
+
+using System;
+using System.ServiceModel;
+
+namespace WCFService3
+{
+    [ServiceContract]
+    public interface IStudentService
+    {
+        [OperationContract]
+        string GetStudentResult(string name, int marks);
+    }
+
+    public class StudentService : IStudentService
+    {
+        public string GetStudentResult(string name, int marks)
+        {
+            string result;
+            if (marks >= 75)
+                result = "Distinction";
+            else if (marks >= 60)
+                result = "First Class";
+            else if (marks >= 50)
+                result = "Second Class";
+            else if (marks >= 40)
+                result = "Pass";
+            else
+                result = "Fail";
+
+            return "Student Name: " + name +
+                   "\nMarks: " + marks +
+                   "\nResult: " + result;
+        }
+    }
+}
+
+Note: If you encounter any compilation errors regarding ServiceContract or OperationContract, right-click on your project -> Add -> Reference..., and make sure System.ServiceModel is checked and added.
+
+Step 3: Configure Service1.svc
+1. Delete the default Service1.svc file if it was automatically generated with the project.
+
+2. Right-click on your project -> Add -> New Item...
+
+3. Select Text File, name it Service1.svc, and click Add.
+
+4. Open Service1.svc and add the following service directive:
+
+<%@ ServiceHost Language="C#" Debug="true" Service="WCFService3.StudentService" %>
+
+Step 4: Configure Web.config
+1. Open the Web.config file in your project root.
+
+2. Update the <system.serviceModel> section so that it points correctly to your StudentService:
+
+XML Code
+
+<?xml version="1.0"?>
+<configuration>
+  <system.web>
+    <compilation debug="true" targetFramework="4.8"/>
+  </system.web>
+  <system.serviceModel>
+    <behaviors>
+      <serviceBehaviors>
+        <behavior name="StudentServiceBehavior">
+          <serviceMetadata httpGetEnabled="true"/>
+        </behavior>
+      </serviceBehaviors>
+    </behaviors>
+    <services>
+      <service name="WCFService3.StudentService" behaviorConfiguration="StudentServiceBehavior">
+        <endpoint address="" binding="basicHttpBinding" contract="WCFService3.IStudentService"/>
+      </service>
+    </services>
+    <serviceHostingEnvironment aspNetCompatibilityEnabled="true" multipleSiteBindingsEnabled="true"/>
+  </system.serviceModel>
+</configuration>
+
+Step 5: Build and Run the Service
+1. Go to the top menu and select Build -> Build Solution (ensure "Build succeeded" with zero errors).
+
+2. Right-click on Service1.svc in your Solution Explorer and select Set as Start Page.
+
+3. Press Ctrl + F5 to run the service in your browser.
+
+Step 6: Create the WCF Client
+1. Right-click on your solution name (Solution 'WCFService3') in the Solution Explorer.
+
+2. Select Add -> New Project...
+
+3. Choose Console App (.NET Framework) and click Next.
+
+4. Name the project WCFClient and click Create.
+
+
+Step 7: Add Service Reference to the Client
+1. Right-click on the newly created WCFClient project in the Solution Explorer.
+
+2. Select Add -> Service Reference...
+
+3. In the Address field, click Go (or paste your running WCF service URL if prompted). Visual Studio will discover StudentService.
+
+4. Under Namespace, change it to StudentServiceReference1.
+
+5. Click OK.
+
+Step 8: Add Client Program Code (Program.cs)
+1.Open Program.cs inside the WCFClient project.
+
+2. Replace its content with the following code:
+
+Code 
+using System;
+
+namespace WCFClient
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Enter Student Name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter Marks: ");
+            int marks = Convert.ToInt32(Console.ReadLine());
+
+            // Instantiate the WCF client proxy
+            StudentServiceReference1.StudentServiceClient client = new StudentServiceReference1.StudentServiceClient();
+            
+            string result = client.GetStudentResult(name, marks);
+
+            Console.WriteLine();
+            Console.WriteLine("----- STUDENT RESULT -----");
+            Console.WriteLine(result);
+
+            client.Close();
+            Console.ReadKey();
+        }
+    }
+}
+
+Step 9: Configure Multiple Startup Projects & Run
+1. Right-click on your main Solution at the very top of the Solution Explorer and select Properties.
+
+2. Go to Common Properties -> Startup Project.
+
+3. Select Multiple startup projects.
+
+4. Change the action for both your service project and WCFClient to Start.
+
+5. Click Apply, then OK.
+
+6. Press Ctrl + F5 to launch both the service and the client console app simultaneously, input the student name and marks, and view the final evaluated result!

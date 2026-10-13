@@ -1,0 +1,82 @@
+Practical No. 9
+Aim: Write a program to create and verify JWT (JSON Web Token).
+
+Step-by-Step Implementation Guide
+Step 1: Add Required JAR Files in NetBeans
+Before creating the project, make sure your project's libraries include the following JAR files for JJWT (v0.9.1) and Jackson (required for JSON serialization):
+
+jjwt-0.9.1.jar
+jackson-core-2.12.7.jar
+jackson-databind-2.12.7.jar
+jackson-annotations-2.12.7.jar
+
+Step 2: Create a Java Application Project
+1. Open NetBeans and go to File -> New Project... (Shortcut: Ctrl + Shift + N).
+
+2. Select Java in categories and Java Application in Projects. Click Next.
+
+3. Set the Project Name to JWTExample.
+
+4. Click Finish.
+
+Step 3: Create Package and Class
+1. Expand the JWTExample project in the Projects window, right-click on Source Packages, and select New -> Java Package...
+
+2. Name the package jwt and click Finish.
+
+3. Right-click on the newly created jwt package, select New -> Java Class..., and name it JWTExample. Click Finish.
+
+Step 4: Add the Complete Program Code
+Open JWTExample.java and replace its content with the following code:
+
+package jwt;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+public class JWTExample {
+    // Define a secret key used for signing and verifying the JWT
+    private static final String SECRET_KEY = "MySecretKey123456789";
+
+    public static void main(String[] args) {
+        // -------------------------------
+        // CREATE JWT
+        // -------------------------------
+        String username = "student";
+        String role = "admin";
+
+        String token = Jwts.builder()
+                .setSubject(username)
+                .claim("role", role)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+
+        System.out.println("Generated JWT:");
+        System.out.println(token);
+
+        // -------------------------------
+        // VERIFY JWT
+        // -------------------------------
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            System.out.println("\nJWT Verification Successful!");
+            System.out.println("Username: " + claims.getSubject());
+            System.out.println("Role: " + claims.get("role"));
+        } catch (Exception e) {
+            System.out.println("\nJWT Verification Failed!");
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+Step 5: Run the Project
+1. Right-click on the JWTExample project or the file itself.
+
+2. Click on Run File (Shortcut: Shift + F6).
+
+3. Check the bottom output console to verify that the token is generated successfully and the signature verification passes.

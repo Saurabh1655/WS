@@ -1,0 +1,63 @@
+Practical No – 1
+Aim: Write a program to create a simple web service that performs arithmetic operations.
+
+A. Create the Web Service
+1. Go to File -> New Project. Select Java Web in categories and Web Application in Projects. Click on Next to create a web-based project, then click on Next and Finish.
+
+2. Create web service: Right-click on the project -> New -> Web Service.
+
+3. Enter details: Enter a Web Service Name and package name, then click on Finish to create the Web Service.
+
+4. Configure Operations:
+
+  4.1 Click on the Design Tab.
+
+ 4.2 Click on hello and then click on "Remove Operation".
+
+ 4.3 Now click on "Add Operation" to add your own arithmetic operations.
+
+5. Clean and Build: Right-click on the project name and click on "Clean and Build" to clean and build your project.
+
+6. Deploy: Right-click on the project name and click on Deploy to deploy your project.
+
+7. Test the Web Service: Follow the testing process/WSDL steps as outlined in the practical interface.
+
+B. Create the Web Service Client
+8. Create the Client Project: To consume this web service, create a new web application project named "WebServiceClient1".
+
+9. Add Web Service Client Reference:
+
+9.1 Right-click on the project and select Web Service Client.
+
+9.2 Provide the Project details by clicking on Browse, specify the project, and click on Finish. A Web Service References folder will be added.
+
+10 Create index.html: Add the following HTML code:
+
+HTML
+<html>
+<head>
+<title>TODO supply a title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<form action="addserv.jsp">
+<input type="text" name="t1" value="">
+<input type="text" name="t2" value="">
+<input type ="submit" value="ADDSERVICE">
+</form>
+</body>
+</html>
+11. Create the JSP File: Create the addserv.jsp file.
+
+12. Call Web Service Operation:
+
+ 12.1 Right-click in between the body section of your JSP/Servlet file and select Call Web Service Operation.
+
+13. Build and Deploy:
+
+13.1 Right-click on the project name and click on "Clean and Build".
+
+13.2 Right-click on the project name and click on "Deploy".
+
+14. Run: Run the index.html file to view the output

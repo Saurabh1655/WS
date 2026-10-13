@@ -1,0 +1,111 @@
+Practical No. 6
+Aim: Write a JAX-WS web service to perform the following operations. Define a Servlet / JSP that consumes the web service.
+
+Step-by-Step Implementation Guide
+Step 1: Create a Web Application Project (JAX_Eg)
+1. NetBeans IDE kholen aur top menu se File -> New Project... par click karein (Shortcut: Ctrl + Shift + N).
+
+2. Categories me Java Web select karein aur Projects me Web Application select karein. Click on Next.
+
+3. Project Name me JAX_Eg enter karein aur Next click karein.
+
+4. Server select karke Finish click karein.
+
+Step 2: Create Web Service
+1. Projects window me apne JAX_Eg project par right-click karein.
+
+2. Go to New -> Web Service...
+
+3. Web Service Name aur Package Name (e.g., com.service) enter karein, phir Finish click karein.
+
+step 3: Add Arithmetic Operations (Add, Sub, Mult, div)
+ 1. operations.java file par double-click karke open karein. Design mode me jaane ke liye Design tab par click karein.
+
+2. Add Operation par click karke chaaron operations add karein:
+
+2.1 Addition: Operation name Add, return type int. Parameters add karein: parameter name a (type int) aur b (type int). OK click karein.
+
+2.2. Subtraction: Operation name Sub, return type int. Parameters add karein: a (int) aur b (int). OK click karein.
+
+2.3 Multiplication: Operation name Mult, return type int. Parameters add karein: a (int) aur b (int). OK click karein.
+
+2.4 Division: Operation name div, return type int. Parameters add karein: a (int) aur b (int). OK click karein.
+
+Step 4: Add Implementation Code to operations.java
+Source view me switch karein ya code ko is tarah update karein:
+
+package com.service;
+
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+
+@WebService(serviceName = "operations")
+public class operations {
+
+    @WebMethod(operationName = "Add")
+    public int Add(@WebParam(name = "a") int a, @WebParam(name = "b") int b) {
+        int c = a + b;
+        return c;
+    }
+
+    @WebMethod(operationName = "Sub")
+    public int Sub(@WebParam(name = "a") int a, @WebParam(name = "b") int b) {
+        int c = a - b;
+        return c;
+    }
+
+    @WebMethod(operationName = "Mult")
+    public int Mult(@WebParam(name = "a") int a, @WebParam(name = "b") int b) {
+        int c = a * b;
+        return c;
+    }
+
+    @WebMethod(operationName = "div")
+    public int div(@WebParam(name = "a") int a, @WebParam(name = "b") int b) {
+        int c = a / b;
+        return c;
+    }
+}
+
+Step 5: Clean, Build & Deploy
+1. Project par right-click karein -> Clean and Build.
+
+2. Dobara project par right-click karein -> Deploy.
+
+3. Web service file par right-click karke Test Web Service option se service test kar sakte hain.
+
+Step 6: Create JSP File to Consume Web Service (newjsp.jsp)
+1. Web Pages folder par right-click karein -> New -> JSP...
+
+2. File name me newjsp type karein aur Finish click karein.
+
+3. Is JSP file ke andar yeh complete code add karein:
+
+Code
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <%
+            com.service.operations a1 = new com.service.operations();
+            int d = a1.Add(5, 10);
+            int e = a1.Mult(10, 20);
+            int f = a1.Sub(30, 10);
+            int g = a1.div(100, 50);
+            out.println("Addition :" + d + "<br>");
+            out.println("Multiplication :" + e + "<br>");
+            out.println("Subtraction :" + f + "<br>");
+            out.println("Division :" + g);
+        %>
+    </body>
+</html>
+
+Step 7: Final Build and Run
+1. Project par right-click karke ek baar phir Clean and Build karein.
+
+2. newjsp.jsp file par right-click karke Run par click karein taki output browser me dikh sake.

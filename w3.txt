@@ -1,0 +1,139 @@
+Aim: Perform the following:
+
+A. Write a program to implement a one-way operation.
+
+B. Write a program to implement a two-way operation.
+
+Step-by-Step Implementation Guide
+Step 1: Start Database Server
+ 1. NetBeans IDE kholen aur left side par Services tab par click karein (agar nahi dikh raha toh top menu me Window -> Services par click karein).
+
+2. Services window me Java DB par right-click karein.
+
+3. Click on Start Server.
+
+Step 2: Connect to Sample Database
+1. Server start hone ke baad, Java DB ke andar jo sample database hoga (ya jdbc:derby://localhost:1527/sample) uspe right-click karein.
+
+2. Click on Connect to connect the sample database with the server.
+
+Step 3: Create Table (friends)
+1.Databases node ko expand karein -> jdbc:derby://localhost:1527/sample ko expand karein -> Tables folder par right-click karein.
+
+2. Click on Create Table...
+
+3. Table name field me friends type karein.
+
+4. Table structure banane ke liye Add Column button par click karein:
+
+4.1Column name me id dalein, data type select karein, aur Primary Key checkbox ko tick karein. OK par click karein.
+
+4.2 Dobara Add Column button par click karein. Column name me name dalein, data type select karein, lekin Primary Key tick MAT karein. OK par click karein.
+
+5. Table creation dialog box me OK button par click karein.
+
+Step 4: Create Web Application Project (Service)
+1. Top menu se File -> New Project... par click karein (Shortcut: Ctrl + Shift + N).
+
+4.2 Categories me Java Web select karein aur Projects me Web Application select kareinkan. Click on Next.
+
+4.3 Project Name me Service enter karein, location select karein, aur Next click karein.
+
+3.4 Server me GlassFish Server select karke Finish click karein.
+
+Step 5: Create Web Service (myws)
+5.1 Projects tab me apne Service project par right-click karein.
+
+5.2 Go to New -> Web Service... (agar list me na ho to Other -> Web Services -> Web Service select karein).
+
+5.3 Web Service Name me myws type karein.
+
+5.4 Package Name me ws type karein.
+
+5.5 Click on Finish.
+
+Step 6: Configure GlassFish JDBC Connection Pool & Resource
+
+6.1 Services tab me jayein -> Servers -> GlassFish Server ko expand karein.
+
+6.2 GlassFish ke admin console ya NetBeans ke through JDBC Connection Pool aur JDBC Resource (mydsn) configure karein jaisa practical manual ki images me bataya gaya hai.
+
+6.3 Next, Next karke resource jiska JNDI name mydsn ho, use setup complete karein.
+
+Step 7: Add Source Code to myws.java
+1 Projects window me Service project ke andar Source Packages -> ws -> myws.java par double-click karein.
+
+2. Design view se code view me switch karke ya existing code ko replace karke yeh complete code paste karein:
+
+Code 
+
+Java
+package ws;
+
+import javax.annotation.Resource;
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.sql.DataSource;
+import java.sql.*;
+
+@WebService(serviceName = "myws")
+public class myws {
+    
+    @Resource(name = "mydsn")
+    private DataSource mydsn;
+
+    /**
+     * Web service operation (One-way / Get Data)
+     */
+    @WebMethod(operationName = "getName")
+    public String getName(@WebParam(name = "id") int id) {
+        try {
+            Connection c = mydsn.getConnection();
+            PreparedStatement ps = c.prepareStatement("select * from friends where id=?");
+            ps.setInt(1, id);
+            ResultSet r = ps.executeQuery();
+            if (r.next())
+                return r.getString(2);
+            else
+                return "No name found";
+        } catch (Exception e) {
+            return "error";
+        }
+    }
+
+    /**
+     * Web service operation (Two-way / Insert)
+     */
+    @WebMethod(operationName = "insert")
+    public String insert(@WebParam(name = "id") int id, @WebParam(name = "name") String name) {
+        try {
+            Connection c = mydsn.getConnection();
+            PreparedStatement ps = c.prepareStatement("insert into friends (id,name) values (?,?)");
+            ps.setInt(1, id);
+            ps.setString(2, name);
+            ps.executeUpdate();
+        } catch (Exception e) {}
+        return null;
+    }
+}
+Step 8: Deploy the Web Service Project
+1. Projects window me Service project par right-click karein.
+
+2. Click on Clean and Build, phir dobara right-click karke Deploy par click karein.
+
+Step 9: Create Web Service Client Project
+1. Go to File -> New Project -> Java Web -> Web Application (Project Name: ServiceClient ya kuch bhi appropriate rakhein).
+
+2. Client project par right-click karein -> New -> Web Service Client.
+
+3. Project browse karke apna myws web service select karein aur Finish click karein.
+
+Step 10: Create JSP Files and Run
+1. Web Pages par right-click karein -> New -> JSP...
+
+2. Files ke naam getData.jsp aur insertData.jsp rakhein.
+
+3. In files ke andar drag-and-drop ya right-click karke Call Web Service Operation ka use karke operations ko link karein.
+
+4. Client project par right-click karke Run par click karein.

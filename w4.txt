@@ -1,0 +1,149 @@
+prac4
+Aim: To implement a Business UDDI Registry using Java.
+
+Step-by-Step Implementation Guide
+
+Step 1: Create a Java Project
+1. NetBeans IDE kholen aur top menu se File -> New Project... par click karein (Shortcut: Ctrl + Shift + N).
+
+2. Categories me Java ya Java Application select karein aur click karein Next.
+
+3. Project Name: UDDIRegistryDemo type karein.
+
+4. Package Name: uddidemo enter karein. Click on Finish.
+
+Step 2: Create Business.java Class
+1. Projects window me uddidemo package par right-click karein.
+
+2. Go to New -> Java Class...
+
+3. Class Name me Business type karein aur Finish click karein.
+
+4. Business.java file ke andar yeh code add karein:
+
+code 
+package uddidemo;
+
+public class Business {
+    private String businessKey;
+    private String businessName;
+    private String description;
+    private String contact;
+
+    public Business(String businessKey, String businessName, String description, String contact) {
+        this.businessKey = businessKey;
+        this.businessName = businessName;
+        this.description = description;
+        this.contact = contact;
+    }
+
+    public String getBusinessKey() {
+        return businessKey;
+    }
+
+    public void displayBusiness() {
+        System.out.println("--------------------------------");
+        System.out.println("Business Key : " + businessKey);
+        System.out.println("Business Name: " + businessName);
+        System.out.println("Description  : " + description);
+        System.out.println("Contact      : " + contact);
+        System.out.println("--------------------------------");
+    }
+}
+
+
+Step 3: Create Registry.java Class
+1. Dobara uddidemo package par right-click karein -> New -> Java Class...
+
+2. Class Name me Registry type karein aur Finish click karein.
+
+3. Registry.java file ke andar yeh code add karein:
+
+code
+
+package uddidemo;
+
+import java.util.ArrayList;
+
+public class Registry {
+    ArrayList<Business> businessList = new ArrayList<>();
+
+    // Register Business
+    public void registerBusiness(Business business) {
+        businessList.add(business);
+        System.out.println("Business Registered Successfully.");
+    }
+
+    // Display All Businesses
+    public void displayBusinesses() {
+        System.out.println("\n===== UDDI BUSINESS REGISTRY =====");
+        for (Business business : businessList) {
+            business.displayBusiness();
+        }
+    }
+
+    // Search Business
+    public void searchBusiness(String key) {
+        boolean found = false;
+        for (Business business : businessList) {
+            if (business.getBusinessKey().equalsIgnoreCase(key)) {
+                System.out.println("\nBusiness Found");
+                business.displayBusiness();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("\nBusiness Not Found.");
+        }
+    }
+}
+
+Step 4: Create Main Class (UDDIRegistryDemo.java)
+1.Apna main class open karein ya uddidemo package par right-click karke UDDIRegistryDemo.java file banayein.
+
+2. Is file ke andar yeh complete code paste karein:
+
+Code 
+
+package uddidemo;
+
+public class UDDIRegistryDemo {
+    public static void main(String[] args) {
+        Registry registry = new Registry();
+
+        Business b1 = new Business(
+                "BUS101",
+                "ABC Technologies",
+                "Software Development Company",
+                "abc@gmail.com");
+
+        Business b2 = new Business(
+                "BUS102",
+                "XYZ Solutions",
+                "Cloud Service Provider",
+                "xyz@gmail.com");
+
+        Business b3 = new Business(
+                "BUS103",
+                "PQR Infotech",
+                "Web Application Development",
+                "pqr@gmail.com");
+
+        // Register Businesses
+        registry.registerBusiness(b1);
+        registry.registerBusiness(b2);
+        registry.registerBusiness(b3);
+
+        // Display Registry
+        registry.displayBusinesses();
+
+        // Search
+        registry.searchBusiness("BUS102");
+    }
+}
+
+Step 5: Run the Project
+1. Project ke root folder (UDDIRegistryDemo) par right-click karein.
+
+2. Click on Run (Shortcut: Shift + F6) to execute the program and check the output in the bottom console window.

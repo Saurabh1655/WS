@@ -1,0 +1,127 @@
+Practical No. 10
+Aim: Define a web service method that returns the contents of a database in a JSON string. The contents should be displayed in a tabular format.
+
+Step-by-Step Implementation Guide
+
+Step 1: Start Database Server
+1. Open NetBeans IDE and look at the left-hand panel for the Services tab (if not visible, go to Window -> Services from the top menu).
+
+2. Expand Java DB, right-click on it, and click on Start Server.
+
+Step 2: Connect to Sample Database
+1. Once the server is running, right-click on the sample database (jdbc:derby://localhost:1527/sample) under Java DB.
+
+2. Click on Connect to establish the connection with the server.
+
+Step 3: Create Table (FRIENDS1)
+1. Expand the connected sample database node, locate the Tables folder, right-click on it, and select Create Table...
+
+2. In the table creation dialog box, enter FRIENDS1 as the table name.
+
+3. Click on the Add Column button to add the table structure:
+
+3.1 First Column: Enter column name as id, choose an appropriate integer/numeric data type, tick the Primary Key checkbox, and click OK.
+
+3.2 Second Column: Enter column name as firstname (or name), choose a text/varchar data type, leave Primary Key unchecked, and click OK.
+
+4. Click OK to finish creating the table.
+
+Step 4: Add Records to the Table
+1. Right-click on the newly created FRIENDS1 table in the database tree and select View Data.
+
+2. Click on the Insert Data icon (the leftmost icon in the second panel/toolbar) to add sample records.
+
+3. Enter record details for id and firstname, click Add Row to insert additional records if needed, and click OK to save.
+
+Step 5: Create Server Web Application (Server1)
+1. Go to File -> New Project... (Shortcut: Ctrl + Shift + N).
+
+2. Select Java Web in categories and Web Application in projects, then click Next.
+
+3. Enter the Project Name as Server1, click Next, select your server (GlassFish Server), and click Finish.
+
+Step 6: Create RESTful Web Services from Database
+1. Right-click on your Server1 project in the Projects window.
+
+2. Select New -> Other... (or go directly to Web Services / Persistence options depending on NetBeans version).
+
+3. Search for and select RESTful Web Services from Database, then click Next.
+
+4. Select the data source (jdbc/sample), choose the FRIENDS1 table, and click Add to move it to the selected tables list. Click Next.
+
+5. Enter the package name as com.kk, click Next, and then click Finish.
+
+Step 7: Modify Generated Web Service for JSON
+
+1. In the Projects window, expand your project sources and double-click to open the generated resource/service file under the com.kk package.
+
+2. Locate the generated methods and remove the XML/produces parts (such as @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})) from every method so that it exclusively communicates and responds in JSON format.
+
+Step 8: Deploy the Server Project
+
+1. Right-click on the Server1 project in the Projects window.
+
+2. Click on Clean and Build, and then right-click again and click on Deploy.
+
+Step 9: Create Client Web Application (Client1)
+1. Go to File -> New Project... -> Java Web -> Web Application.
+
+2. Name the project Client1 and click Finish.
+
+3. Open the default index.html file inside the Client1 project and replace its entire code with the following implementation:
+
+code
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Database in Table</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 50%;
+            margin-top: 20px;
+        }
+        td, th {
+            border: 1px solid #000000;
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        var request = new XMLHttpRequest();
+        request.open('GET', 'http://localhost:8080/Server1/webresources/com.kk.friends1/', true);
+        request.onload = function() {
+            var data = JSON.parse(this.response);
+            for (var i = 0; i < data.length; i++) {
+                var table = document.getElementById("myTable");
+                var row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                cell1.innerHTML = data[i].id;
+                cell2.innerHTML = data[i].firstname;
+            }
+        };
+        request.send();
+    </script>
+</head>
+<body>
+    <h2>Friends Records from Database</h2>
+    <table id="myTable">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+        </tr>
+    </table>
+</body>
+</html>
+
+Step 10: Run the Client Application
+1. Right-click on the Client1 web application project.
+
+2. Click on Run (or right-click index.html -> Run File) to launch the web page in your browser and view the database records fetched via the RESTful web service rendered in a clean tabular format.

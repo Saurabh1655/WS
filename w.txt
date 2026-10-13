@@ -1,0 +1,13 @@
+import java.net.URL;
+import java.util.Scanner;
+
+public class P1 {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("https://raw.githubusercontent.com/Saurabh1655/BDA/main/P2.txt");
+        try (Scanner sc = new Scanner(url.openStream())) {
+            while (sc.hasNextLine()) {
+                System.out.println(sc.nextLine());
+            }
+        }
+    }
+}

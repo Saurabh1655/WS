@@ -1,0 +1,96 @@
+Practical No – 2
+Aim: Write a program to create a simple web service that converts the temperature from Fahrenheit to Celsius and vice-versa.
+
+A. Create the Web Service
+1. Create Project: Go to File -> New Project. Select Java Web in categories and Web Application in Projects. Click on Next to create a web-based project.
+
+2. Enter Details: Enter your desired project name and click on Next. On the next page, click Finish.
+
+3. Create Web Service: Right-click on the Project -> New -> Web Service.
+
+4. Enter Service Name: Enter a Web Service Name and package name, then click on Finish to create the Web Service.
+
+5. Add Operations (temp_service.java):
+
+ 5.1 Double-click on the temp_service.java file to open it. Go to design mode by clicking on the Design tab.
+
+5.2 Click on Add Operation to add an operation.
+
+5.3First Operation (F_to_C): Set Operation name to F_to_C and return type to Double. Click on Add to specify parameters: set name to f and type to Double, then click OK.
+
+6. Second Operation (C_to_F): Create a second operation with the following details:
+
+6.1 Operation Name: C_to_F (Return type: Double)
+
+6.2 Parameter Name: c (Type: Double)
+
+7. Add Implementation Code: Replace the implementation inside temp_service.java with the following:
+
+code:
+package Service;
+
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+
+@WebService(serviceName = "temp_service")
+public class temp_service {
+
+    @WebMethod(operationName = "F_to_C")
+    public Double F_to_C(@WebParam(name = "f") double f) {
+        Double c = (f - 32) * 0.6;
+        return c;
+    }
+
+    @WebMethod(operationName = "C_to_F")
+    public Double C_to_F(@WebParam(name = "c") double c) {
+        Double f = (c * 1.8) + 32;
+        return f;
+    }
+}
+
+8. Clean and Build: Right-click on the project name and click on Clean and Build.
+
+9. Deploy: Right-click on the project name and click on Deploy.
+
+10. Test Web Service: Right-click the web service to test it, which opens a testing interface in your browser where you can input test values.
+
+B. Create the Web Service Client (Temp_client)
+11. Create Client Project: Create a new web application project named Temp_client.
+
+12. Create index.html: Open the index.html page of Temp_client and add the following form code:
+
+HTML
+
+<html>
+<head>
+<title>TODO supply a title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<form>
+<br><input type="text" name="data"><br>
+<br><input type="submit" value="Convert F to C" name="ftoc" formaction="f_to_c.jsp"><br>
+<br><input type="submit" value="Convert C to F" name="ctof" formaction="c_to_f.jsp">
+</form>
+</body>
+</html>
+
+13. Create JSP Pages: Right-click on Web Pages -> New -> JSP:
+
+13.1 Enter file name as f_to_c and click Finish.
+
+13.2 Enter file name as c_to_f and click Finish.
+
+14. Add Web Service Client Reference:
+
+14.1 Right-click on Temp_client and select Web Service Client.
+
+14.2 Click on Browse, select temp_service, click OK, and then click Finish.
+
+15 Call Web Service Operation:
+
+15.1 Open f_to_c.jsp and c_to_f.jsp, right-click in between the body section, and select Call Web Service Operation to link the respective conversion methods.
+
+16 .Run Project: Run the Temp_client project to check the output interface in your browser.
