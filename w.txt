@@ -11,3 +11,39 @@ public class P1 {
         }
     }
 }
+
+
+
+package javaapplication3;
+import java.net.URL;
+import java.util.Scanner;
+public class JavaApplication3 {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("https://cdn.jsdelivr.net/gh/Saurabh1655/WS@main/w2.txt");
+        try (Scanner sc = new Scanner(url.openStream())) {
+            while (sc.hasNextLine()) {
+                System.out.println(sc.nextLine());
+            }
+        }
+    }
+    
+}
+
+
+package javaapplication3;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.util.Scanner;
+public class JavaApplication3 {
+    public static void main(String[] args) throws Exception {
+        URL url = new URL("https://raw.githubusercontent.com/Saurabh1655/WS/main/w2.txt");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+        
+        try (Scanner sc = new Scanner(conn.getInputStream())) {
+            while (sc.hasNextLine()) {
+                System.out.println(sc.nextLine());
+            }
+        }
+    }
+}
